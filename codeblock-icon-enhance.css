@@ -1,0 +1,11 @@
+/* Made For Arc's Boosts */
+:root {
+  /* pickup a nerd-font from nerdfonts.com
+  (e.g. CaskaydiaCove Nerd Font)
+  and paste into here */
+  --nerd-font-name: 'CaskaydiaCove Nerd Font Propo';
+}
+
+:root :is(pre,pre *,code,code *,.cm-editor [class*='cm-'] *,.code,.code *,.blob-num,.blob-num *,.blob-code,.blob-code *,textarea,.react-line-numbers *,.react-code-lines *):not([class*='expand' i],[class*='collapse' i]) {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace,var(--nerd-font-name) !important;
+}
