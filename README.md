@@ -4,5 +4,5 @@
 
 ## Todo
 - work for any other site of your want, not only github.
-- GUI pane for user.
+- ~GUI pane for user.~
 - customable css rule.
