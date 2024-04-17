@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name              GitHub CodeBlock Icon Enhance PowerBy NerdFont
 // @name:zh-CN        GitHub 代码块图标增强（基于 NerdFont）
-// @description       Display more icons by setting NerdFont for GitHub's codeblock.
+// @description       Display more icons by setting NerdFont for GitHub's code block.
 // @description:zh-CN 通过为 GitHub 代码块设置 NerdFont 字体以显示更多图标。
 // @icon              https://github.githubassets.com/favicons/favicon.png
 // @author            cuiko
@@ -28,8 +28,8 @@
 // @run-at            document-start
 // ==/UserScript==
 
-(function() {
-  'use strict'
+;(function () {
+  "use strict"
 
   class Fonts {
     constructor(...fonts) {
@@ -57,7 +57,15 @@
   }
 
   let default_settings = {
-    presetFonts: new Fonts("ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "Liberation Mono", "monospace"),
+    presetFonts: new Fonts(
+      "ui-monospace",
+      "SFMono-Regular",
+      "SF Mono",
+      "Menlo",
+      "Consolas",
+      "Liberation Mono",
+      "monospace"
+    ),
     customFonts: new Fonts("CaskaydiaCove Nerd Font Propo"),
   }
 
@@ -67,13 +75,13 @@
 
   let kit = {
     /**
-      * prompt
-      * @param {Object} options
-      * @param {string} options.title
-      * @param {string} options.default_value
-      * @param {Function} options.callback
-      */
-    prompt: function(options) {
+     * prompt
+     * @param {Object} options
+     * @param {string} options.title
+     * @param {string} options.default_value
+     * @param {Function} options.callback
+     */
+    prompt: function (options) {
       let { title, default_value, callback } = options
 
       if (Swal) {
@@ -86,7 +94,7 @@
         const value = window.prompt(title, default_value)
         callback(value)
       }
-    }
+    },
   }
 
   /**
@@ -96,44 +104,49 @@
    * @param {string} css
    */
   function addStyle(id, tag, css) {
-    tag = tag || 'style'
-    let doc = document, styleDom = doc.getElementById(id)
+    tag = tag || "style"
+    let doc = document,
+      styleDom = doc.getElementById(id)
     if (styleDom) styleDom.remove()
     let style = doc.createElement(tag)
-    style.rel = 'stylesheet'
+    style.rel = "stylesheet"
     style.id = id
-    tag === 'style' ? style.innerHTML = css : style.href = css
-    doc.getElementsByTagName('body')[0].appendChild(style)
+    tag === "style" ? (style.innerHTML = css) : (style.href = css)
+    doc.getElementsByTagName("body")[0].appendChild(style)
   }
 
   /**
-    * apply fonts setting
-    * @param fonts string
-    * @returns {Fonts}
-    */
+   * apply fonts setting
+   * @param fonts string
+   * @returns {Fonts}
+   */
   function applyFonts(fonts) {
     let codeblockFonts = fonts ? new Fonts(fonts) : default_settings.customFonts
 
     GM_setValue(Symbol.PLUGIN_NAME, codeblockFonts.toString())
-    addStyle(Symbol.PLUGIN_NAME, 'style', ` :root :is(pre,pre *,code,code *,.cm-editor [class*='cm-'] *,.code,.code *,.blob-num,.blob-num *,.blob-code,.blob-code *,textarea,.react-line-numbers *,.react-code-lines *):not([class*='expand' i],[class*='collapse' i]) { font-family: ${default_settings.presetFonts.toString()},${codeblockFonts} !important; } `)
+    addStyle(
+      Symbol.PLUGIN_NAME,
+      "style",
+      ` :root :is(pre,pre *,code,code *,.cm-editor [class*='cm-'] *,.code,.code *,.blob-num,.blob-num *,.blob-code,.blob-code *,textarea,.react-line-numbers *,.react-code-lines *):not([class*='expand' i],[class*='collapse' i]) { font-family: ${default_settings.presetFonts.toString()},${codeblockFonts} !important; } `
+    )
 
     return codeblockFonts
   }
 
   function main() {
     // init default settings
-    addStyle('swal-pub-style', 'style', GM_getResourceText('Swal'))
+    addStyle("swal-pub-style", "style", GM_getResourceText("Swal"))
     let fonts = GM_getValue(Symbol.PLUGIN_NAME)
     let appliedFonts = applyFonts(fonts)
 
     // init menu
-    GM_registerMenuCommand('Font Settings', () => {
+    GM_registerMenuCommand("Font Settings", () => {
       kit.prompt({
         title: "Enter the font(s) you want to use for the code block",
         default_value: appliedFonts.toString(),
         callback: (value) => {
           appliedFonts = applyFonts(value)
-        }
+        },
       })
     })
   }
